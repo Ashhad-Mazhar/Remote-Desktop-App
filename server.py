@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# Server.py of 'Remote Desktop'
 import socket # For network connections
 import tkinter as tk # To create a graphical user interface
 from tkinter.messagebox import showinfo # To give alerts

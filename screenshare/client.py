@@ -1,24 +1,43 @@
-####################################### Code For Screen Share #######################################
-#This is the code for the client
 from vidstream import ScreenShareClient
-#Importing the thread
 import threading
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 
-#Can find this using IPConfig in CMD
-myPrivateIPv4Address = input('Enter IP Address: ')
-my_generated_port = int(input('Enter Port Number: '))
+# Function to prompt for IP address and port using tkinter
+def get_ip_and_port():
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
 
-#Sending the data as parameters and saving them in sender variable
-sender = ScreenShareClient(myPrivateIPv4Address,my_generated_port)
+    # Ask for the IP address
+    ip_address = simpledialog.askstring("Input", "Enter IP Address:", parent=root)
+    if not ip_address:
+        messagebox.showerror("Error", "IP Address is required!")
+        root.destroy()
+        exit()
 
-#Send the stream thread to start sharing
+    # Ask for the port number
+    port = simpledialog.askinteger("Input", "Enter Port Number:", parent=root, minvalue=1, maxvalue=65535)
+    if not port:
+        messagebox.showerror("Error", "Port Number is required!")
+        root.destroy()
+        exit()
+
+    root.destroy()
+    return ip_address, port
+
+# Get IP address and port from the popup
+myPrivateIPv4Address, my_generated_port = get_ip_and_port()
+
+# Sending the data as parameters and saving them in sender variable
+sender = ScreenShareClient(myPrivateIPv4Address, my_generated_port)
+
+# Send the stream thread to start sharing
 t = threading.Thread(target=sender.start_stream)
 t.start()
 
-#If STOP is the call then break the loop and connection with the server
+# If STOP is the call, break the loop and connection with the server
 while input("") != 'STOP':
     continue
 
-#To stop the client stream connected to the server
+# To stop the client stream connected to the server
 sender.stop_stream()
-####################################### Code For Screen Share #######################################
